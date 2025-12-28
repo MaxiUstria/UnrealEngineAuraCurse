@@ -9,6 +9,8 @@
 #include "Character/AuraCharacterBase.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectTypes.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/Controller.h"
 
 // Sets default values
 AAuraEffectActor::AAuraEffectActor()
