@@ -8,10 +8,32 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
+#include "AuraGameplayTags.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
 
+	BIND_ATTRIBUTE_TO_TAG(Strength, GameplayTags.Attributes_Primary_Strength);
+	BIND_ATTRIBUTE_TO_TAG(Intelligence, GameplayTags.Attributes_Primary_Intelligence);
+	BIND_ATTRIBUTE_TO_TAG(Resilience, GameplayTags.Attributes_Primary_Resilience);
+	BIND_ATTRIBUTE_TO_TAG(Vigor, GameplayTags.Attributes_Primary_Vigor);
+
+	/* Secondary Attributes */
+	BIND_ATTRIBUTE_TO_TAG(MaxHealth, GameplayTags.Attributes_Secondary_MaxHealth);
+	BIND_ATTRIBUTE_TO_TAG(MaxMana, GameplayTags.Attributes_Secondary_MaxMana);
+	BIND_ATTRIBUTE_TO_TAG(Armor, GameplayTags.Attributes_Secondary_Armor);
+	BIND_ATTRIBUTE_TO_TAG(ArmorPenetration, GameplayTags.Attributes_Secondary_ArmorPenetration);
+	BIND_ATTRIBUTE_TO_TAG(BlockChance, GameplayTags.Attributes_Secondary_BlockChance);
+	BIND_ATTRIBUTE_TO_TAG(CriticalHitChance, GameplayTags.Attributes_Secondary_CriticalHitChance);
+	BIND_ATTRIBUTE_TO_TAG(CriticalHitDamage, GameplayTags.Attributes_Secondary_CriticalHitDamage);
+	BIND_ATTRIBUTE_TO_TAG(CriticalHitResistance, GameplayTags.Attributes_Secondary_CriticalHitResistance);
+	BIND_ATTRIBUTE_TO_TAG(HealthRegeneration, GameplayTags.Attributes_Secondary_HealthRegeneration);
+	BIND_ATTRIBUTE_TO_TAG(ManaRegeneration, GameplayTags.Attributes_Secondary_ManaRegeneration);
+
+	/* Vital Attributes */
+	BIND_ATTRIBUTE_TO_TAG(Health, GameplayTags.Attributes_Vital_Health);
+	BIND_ATTRIBUTE_TO_TAG(Mana, GameplayTags.Attributes_Vital_Mana);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -13,6 +13,18 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DELEGATE_RetVal_OneParam(FGameplayAttributeData, FAttributeSignature, const UAuraAttributeSet*);
+
+#define BIND_ATTRIBUTE_TO_TAG(AttributeName, Tag) \
+	{ \
+		FAttributeSignature AttributeName##Delegate; \
+		AttributeName##Delegate.BindLambda([](const UAuraAttributeSet* AttributeSet) -> FGameplayAttributeData \
+		{ \
+			return AttributeSet->Get##AttributeName(); \
+		}); \
+		TagsToAttributes.Add(Tag, AttributeName##Delegate); \
+	}
+
 USTRUCT()
 struct FEffectProperties
 {
@@ -138,6 +150,8 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 
 		virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 		virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+		TMap<FGameplayTag, FAttributeSignature> TagsToAttributes;
 	
 		UFUNCTION()
 		void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
