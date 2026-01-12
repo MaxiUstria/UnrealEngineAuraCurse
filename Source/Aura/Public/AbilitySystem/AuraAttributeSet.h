@@ -23,6 +23,7 @@ DECLARE_DELEGATE_RetVal_OneParam(FGameplayAttributeData, FAttributeSignature, co
 			return AttributeSet->Get##AttributeName(); \
 		}); \
 		TagsToAttributes.Add(Tag, AttributeName##Delegate); \
+		TagsToGameplayAttributes.Add(Tag, UAuraAttributeSet::Get##AttributeName##Attribute()); \
 	}
 
 USTRUCT()
@@ -152,6 +153,7 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 		virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 		TMap<FGameplayTag, FAttributeSignature> TagsToAttributes;
+		TMap<FGameplayTag, FGameplayAttribute> TagsToGameplayAttributes;
 	
 		UFUNCTION()
 		void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
