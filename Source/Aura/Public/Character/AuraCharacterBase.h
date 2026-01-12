@@ -46,6 +46,11 @@ protected:
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect, const float Level) const;
-
 	void InitializeDefaultAttributes() const;
+
+	void AddCharacterAbilities();
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };

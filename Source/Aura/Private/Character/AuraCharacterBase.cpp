@@ -48,3 +48,12 @@ void AAuraCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect> Ga
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffect, Level, ContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 }
+
+void AAuraCharacterBase::AddCharacterAbilities()
+{
+	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+
+	if (!HasAuthority()) return;
+
+	AuraASC->AddCharacterAbilities(StartupAbilities);
+}

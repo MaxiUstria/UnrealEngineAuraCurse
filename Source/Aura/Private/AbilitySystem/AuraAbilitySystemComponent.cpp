@@ -16,3 +16,12 @@ void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* Ability
 
     EffectAssetTags.Broadcast(TagContainer);
 }
+
+void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+    for (const TSubclassOf<UGameplayAbility>& AbilityClass : StartupAbilities)
+    {
+        FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+        GiveAbilityAndActivateOnce(AbilitySpec);
+    }
+}
