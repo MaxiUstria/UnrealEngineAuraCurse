@@ -52,7 +52,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagHeld(FGameplayTag InputTag)
 {
     if (InputTag.IsValid()){
         for (auto& AbilitySpec : GetActivatableAbilities()){
-            if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag)){
+            if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InputTag)){
                 AbilitySpecInputPressed(AbilitySpec);
                 if (!AbilitySpec.IsActive()){
                     TryActivateAbility(AbilitySpec.Handle);
@@ -66,7 +66,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(FGameplayTag InputTag)
 {
     if (InputTag.IsValid()){
         for (auto& AbilitySpec : GetActivatableAbilities()){
-            if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag)){
+            if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InputTag)){
                 AbilitySpecInputReleased(AbilitySpec);
             }
         }
