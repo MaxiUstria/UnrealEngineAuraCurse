@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -22,6 +23,52 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
     for (const TSubclassOf<UGameplayAbility>& AbilityClass : StartupAbilities)
     {
         FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-        GiveAbilityAndActivateOnce(AbilitySpec);
+        if (AbilityClass && AbilityClass->IsChildOf<UAuraGameplayAbility>())
+        {
+            if (const UAuraGameplayAbility* AuraAbilityCDO = AbilityClass->GetDefaultObject<UAuraGameplayAbility>())
+            {
+                AbilitySpec.GetDynamicSpecSourceTags().AddTag(AuraAbilityCDO->StartupInputTag);
+            }
+        }
+        GiveAbility(AbilitySpec);
+    }
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+    // if (InputTag.IsValid()){
+    //     for (auto& AbilitySpec : GetActivatableAbilities()){
+    //         if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InputTag)){
+    //             AbilitySpecInputPressed(AbilitySpec);
+    //             if (!AbilitySpec.IsActive()){
+    //                 TryActivateAbility(AbilitySpec.Handle);
+    //             }
+    //         }
+    //     }
+    // }
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+    if (InputTag.IsValid()){
+        for (auto& AbilitySpec : GetActivatableAbilities()){
+            if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag)){
+                AbilitySpecInputPressed(AbilitySpec);
+                if (!AbilitySpec.IsActive()){
+                    TryActivateAbility(AbilitySpec.Handle);
+                }
+            }
+        }
+    }
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+    if (InputTag.IsValid()){
+        for (auto& AbilitySpec : GetActivatableAbilities()){
+            if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag)){
+                AbilitySpecInputReleased(AbilitySpec);
+            }
+        }
     }
 }

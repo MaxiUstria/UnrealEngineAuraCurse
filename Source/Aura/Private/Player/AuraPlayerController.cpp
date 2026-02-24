@@ -6,6 +6,9 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
 #include "Interaction/EnemyInterface.h"
+#include "Input/AuraInputComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 
 AAuraPlayerController::AAuraPlayerController()
@@ -36,9 +39,11 @@ void AAuraPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent();
 
-    UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+    UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 
-    EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+    AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+
+    AuraInputComponent->BindAbilityActions(InputConfig, this, &AAuraPlayerController::AbilityInputTagPressed, &AAuraPlayerController::AbilityInputTagReleased, &AAuraPlayerController::AbilityInputTagHeld);
 }
 
 void AAuraPlayerController::Move(const struct FInputActionValue& Value)
@@ -86,4 +91,37 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
     Super::PlayerTick(DeltaTime);
 
     CursorTrace();
+}
+
+void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+    if (GetASC() == nullptr){
+        return;
+    }
+    GetASC()->AbilityInputTagPressed(InputTag);
+}
+
+void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+    if (GetASC() == nullptr){
+        return;
+    }
+    GetASC()->AbilityInputTagReleased(InputTag);
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+    if (GetASC() == nullptr){
+        return;
+    }
+    GetASC()->AbilityInputTagHeld(InputTag);
+}
+
+UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
+{
+    if (AuraAbilitySystemComponent == nullptr)
+    {
+        AuraAbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn()));
+    }
+    return AuraAbilitySystemComponent;
 }
