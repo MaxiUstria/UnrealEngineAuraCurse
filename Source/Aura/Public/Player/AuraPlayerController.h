@@ -42,6 +42,7 @@ class AURA_API AAuraPlayerController : public APlayerController
 		void CursorTrace();
 		TScriptInterface<IEnemyInterface> LastActor;
 		TScriptInterface<IEnemyInterface> ThisActor;
+		FHitResult CursorHit;
 
 		void AbilityInputTagPressed(FGameplayTag InputTag);
 		void AbilityInputTagReleased(FGameplayTag InputTag);
