@@ -44,4 +44,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UAudioComponent> LoopingSoundComponent;
+
+	UPROPERTY(EditAnywhere)
+	float LifeSpan = 15.f;
 };
