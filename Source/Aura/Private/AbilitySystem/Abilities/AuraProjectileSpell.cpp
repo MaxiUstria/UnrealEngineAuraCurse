@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "AbilitySystem/Abilities/AuraProjectileSpell.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Interaction/CombatInterface.h"
 #include "Actor/AuraProjectile.h"
@@ -35,7 +37,10 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
              ESpawnActorCollisionHandlingMethod::AlwaysSpawn
         );
 
-        //TODO: Give the projectile a gameplay effect spec to apply on hit
+        UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+        FGameplayEffectSpecHandle GameplayEffectSpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+        Projectile->GameplayEffectSpecHandle = GameplayEffectSpecHandle;
+        
         Projectile->FinishSpawning(SpawnTransform);
    }
 }

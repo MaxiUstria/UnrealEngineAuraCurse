@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "AbilitySystemComponent.h"
-#include "GameplayEffectExtension.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayEffectExtension.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
 #include "AuraGameplayTags.h"
@@ -195,6 +195,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), GetHealth());
 	}
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{

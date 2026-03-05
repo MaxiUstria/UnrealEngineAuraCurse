@@ -2,6 +2,8 @@
 
 #include "Actor/AuraProjectile.h"
 #include "Aura.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/AudioComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -45,7 +47,13 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
 	LoopingSoundComponent->Stop();
 
-	if (HasAuthority()){
+	if (HasAuthority())
+	{
+		UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor);
+		if (TargetASC)
+		{
+			TargetASC->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpecHandle.Data.Get());
+		}
 		Destroy();
 	}else{
 		bHit = true;
